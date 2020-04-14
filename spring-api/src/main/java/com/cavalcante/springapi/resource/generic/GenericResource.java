@@ -43,7 +43,9 @@ public class GenericResource<T extends GenericModel> {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public T getById(@PathVariable(value = "id") long id) { 
-		return genericRepository.findById(id).orElse(null);
+	public ResponseEntity<T> getById(@PathVariable(value = "id") long id) { 
+		T entity = genericRepository.findById(id).orElse(null);
+		return entity != null ? ResponseEntity.ok(entity) : ResponseEntity.notFound().build();
 	}
+	
 }
