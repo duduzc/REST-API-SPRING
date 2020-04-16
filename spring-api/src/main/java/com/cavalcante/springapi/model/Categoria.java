@@ -22,8 +22,8 @@ public class Categoria extends GenericModel {
 
 	private static final long serialVersionUID = 3924409541518435165L;
 
-	@NotNull
-	@Size(max = 50)
+	@NotNull(message = "Nome da categoria é obrigatório!")
+	@Size(max = 50, message = "O tamanho do nome dever ser entre 1 e 50")
 	@Column(name="categoria_nome")
 	private String nome;
 
