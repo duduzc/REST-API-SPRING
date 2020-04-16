@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class GenericResource<T extends GenericModel> {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<T> create(@RequestBody T entity, HttpServletResponse response) { 
+	public ResponseEntity<T> create(@Valid @RequestBody T entity, HttpServletResponse response) { 
 		T entitySave = genericRepository.save(entity);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
