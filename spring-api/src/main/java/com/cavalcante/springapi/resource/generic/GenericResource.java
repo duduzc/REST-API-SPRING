@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.cavalcante.springapi.event.ResourceCreatedEvent;
 import com.cavalcante.springapi.model.generic.GenericModel;
@@ -48,5 +49,11 @@ public class GenericResource<T extends GenericModel> {
 	public ResponseEntity<T> getById(@PathVariable(value = "id") long id) { 
 		T entity = genericRepository.findById(id).orElse(null);
 		return entity != null ? ResponseEntity.ok(entity) : ResponseEntity.notFound().build();
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable(value = "id") long id){
+		genericRepository.deleteById(id);
 	}
 }
