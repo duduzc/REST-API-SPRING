@@ -5,8 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,5 +57,17 @@ public class GenericResource<T extends GenericModel> {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(value = "id") long id){
 		genericRepository.deleteById(id);
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<T> update (@Valid @RequestBody T entity, @PathVariable(value = "id") long id){
+		T entitySave = genericRepository.findById(id).orElse(null);
+		if(entitySave == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		BeanUtils.copyProperties(entity, entitySave, "id");
+		genericRepository.save(entitySave);	
+		
+		return ResponseEntity.ok(entitySave);
 	}
 }
